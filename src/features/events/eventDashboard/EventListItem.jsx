@@ -1,18 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button, Icon, Item, List, Segment } from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 
-export default function EventListItem({event}) {
+export default function EventListItem({ event, selectEvent, deleteEvent }) {
   return (
     <Segment.Group>
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image
-              size="tiny"
-              circular
-              src={event.hostPhotoURL}
-            />
+            <Item.Image size="tiny" circular src={event.hostPhotoURL} />
             <Item.Content>
               <Item.Header content={event.title} />
               <Item.Description>Hosted by {event.hostedBy}</Item.Description>
@@ -21,25 +18,36 @@ export default function EventListItem({event}) {
         </Item.Group>
       </Segment>
       <Segment>
-          <span>
-              <Icon name="clock"/>
-              <Icon name="marker"/>
-
-          </span>
+        <span>
+          <Icon name="clock" />
+          {event.date}
+          <Icon name="marker" />
+          {event.venue}
+        </span>
       </Segment>
       <Segment>
-          <List horizontal>
-            {event.attendees.map( attendee => <EventListAttendee key={attendee.id} attendee={attendee}/>)}
-              
-          </List>
+        <List horizontal>
+          {event.attendees.map((attendee) => (
+            <EventListAttendee key={attendee.id} attendee={attendee} />
+          ))}
+        </List>
       </Segment>
       <Segment clearing>
-          <div>
-              {event.description}
-          </div>
-          <Button color="teal" floated="right" content="view"/>
+        <div>{event.description}</div>
+        <Button
+          color="red"
+          floated="right"
+          content="Delete"
+          onClick={() => deleteEvent(event.id)}
+        />
+        <Button
+          as={Link}
+          to={`/events/${event.id}`}
+          color="teal"
+          floated="right"
+          content="view"
+        />
       </Segment>
     </Segment.Group>
-
   );
 }
